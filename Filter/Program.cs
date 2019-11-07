@@ -134,20 +134,26 @@ namespace Filter
         };
 
             Algorithm filter = null;
+            KalmanLatLong secondFilter = new KalmanLatLong(0F);
+
+            
+
+            //using (StreamWriter file =
+            //    new StreamWriter(@"C:\path.txt"))
+            //{
+            //    foreach (var location in locations)
+            //    {
+            //        file.Write($"{location.Latitude},{location.Longitude} ");
+            //    }
+            //}
+
+            int i = 0;
 
             using (StreamWriter file =
-                new StreamWriter(@"C:\path.txt"))
-            {
-                foreach (var location in locations)
-                {
-                    file.Write($"{location.Latitude},{location.Longitude} ");
-                }
-            }
-
-            using (StreamWriter file =
-                new StreamWriter(@"C:\path.txt"))
+                new StreamWriter(@"C:\Alg1.txt"), jsFile = new StreamWriter(@"C:\Alg2.txt") )
             {
                 file.Write("[map]");
+                jsFile.Write("[map]");
                 foreach (var location in locations)
                 {
                     if (filter == null)
@@ -157,11 +163,27 @@ namespace Filter
 
                     }
 
+                    if (i == 0)
+                    {
+                        i++;
+                        secondFilter.SetState(location.Latitude, location.Longitude, location.HorizontalAccuracy, location.Timestamp.ToUnixTimeMilliseconds());
+                        continue;
+                        
+                    }
+
+                    var jsKalmanLocation = secondFilter.Process(location.Latitude, location.Longitude,
+                        location.HorizontalAccuracy, location.Timestamp.ToUnixTimeMilliseconds());
                     var kalmanLocation = filter.ProcessState(location);
+
                     file.Write($"{kalmanLocation.Latitude},{kalmanLocation.Longitude} ");
                     Console.WriteLine($" {kalmanLocation.Latitude}  {kalmanLocation.Longitude} ");
+
+                    jsFile.Write($"{jsKalmanLocation.Latitude},{jsKalmanLocation.Longitude} ");
+                    Console.WriteLine($" {jsKalmanLocation.Latitude}  {jsKalmanLocation.Longitude} ");
                 }
+
                 file.Write("[/map]");
+                jsFile.Write("[/map]");
             }
 
             Console.ReadKey();
