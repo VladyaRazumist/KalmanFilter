@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using MathNet.Numerics.LinearAlgebra.Double;
 
 namespace Filter
 {
@@ -136,8 +135,8 @@ namespace Filter
 
             Algorithm filter = null;
 
-            using (System.IO.StreamWriter file =
-                new System.IO.StreamWriter(@"C:\path.txt"))
+            using (StreamWriter file =
+                new StreamWriter(@"C:\path.txt"))
             {
                 foreach (var location in locations)
                 {
@@ -145,8 +144,8 @@ namespace Filter
                 }
             }
 
-            using (System.IO.StreamWriter file =
-                new System.IO.StreamWriter(@"C:\path.txt"))
+            using (StreamWriter file =
+                new StreamWriter(@"C:\path.txt"))
             {
                 file.Write("[map]");
                 foreach (var location in locations)
@@ -164,7 +163,6 @@ namespace Filter
                 }
                 file.Write("[/map]");
             }
-
 
             Console.ReadKey();
             File.Delete(@"C:\path.txt");

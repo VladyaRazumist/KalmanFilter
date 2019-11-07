@@ -51,7 +51,6 @@
   <ItemGroup>
     <Compile Include="Algorithm.cs" />
     <Compile Include="Location.cs" />
-    <Compile Include="MatrixObject.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

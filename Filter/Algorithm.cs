@@ -82,50 +82,41 @@ namespace Filter
             var newMeasureTime = currentLocation.Timestamp;
             RValue = currentLocation.HorizontalAccuracy;
 
-            R = GetMatrix(
-                new double[][]
-                {
-                    new double[] {RValue, 0, 0, 0, 0, 0},
-                    new double[] {0, RValue, 0, 0, 0, 0},
-                    new double[] {0, 0, RValue, 0, 0, 0},
-                    new double[] {0, 0, 0, RValue, 0, 0},
-                    new double[] {0, 0, 0, 0, RValue, 0},
-                    new double[] {0, 0, 0, 0, 0, RValue},
-                }
-            );
-
-            // Convert measure times to seconds
             var newMeasureTimeSeconds = newMeasureTime.ToUnixTimeSeconds();
             var lastMeasureTimeSeconds = previousMeasureTime.ToUnixTimeSeconds();
 
-            // Calculate timeInterval between last and current measure
-              var timeInterval = (double) newMeasureTimeSeconds - lastMeasureTimeSeconds;
+            var timeInterval = (double)newMeasureTimeSeconds - lastMeasureTimeSeconds;
+            timeInterval = timeInterval <= 0 ? 1 : timeInterval;
 
-              if (timeInterval <= 0)
-              {
-                  timeInterval = 1;
-              }
+            //if (RValue > 50)
+            //{
+            //    timeInterval = 1;
+            //}
 
-           
-
-              //if (RValue > 50)
-              //{
-              //    timeInterval = 1;
-              //}
-
-             A = GetMatrix(
-                new double[][]
-                {
+            A = GetMatrix(
+               new double[][]
+               {
                     new double[] {1, 0, 0, 0, 0, 0},
                     new double[] { timeInterval, 1, 0, 0, 0, 0},
                     new double[] {0, 0, 1, 0, 0, 0},
                     new double[] {0, 0, timeInterval, 1, 0, 0},
                     new double[] {0, 0, 0, 0, 1, 0},
                     new double[] {0, 0, 0, 0, timeInterval, 1},
+               }
+           );
+
+            R = GetMatrix(
+                new double[][]
+                {
+                     new double[] {RValue, 0, 0, 0, 0, 0},
+                     new double[] {0, RValue, 0, 0, 0, 0},
+                     new double[] {0, 0, RValue, 0, 0, 0},
+                     new double[] {0, 0, 0, RValue, 0, 0},
+                     new double[] {0, 0, 0, 0, RValue, 0},
+                     new double[] {0, 0, 0, 0, 0, RValue},
                 }
             );
 
-            // Parts of Acceleration Noise Magnitude Matrix
             var part1 = sigma * ((Math.Pow(timeInterval, 4)) / 4);
             var part2 = sigma * ((Math.Pow(timeInterval, 3)) / 2);
             var part3 = sigma * (Math.Pow(timeInterval, 2));
@@ -202,6 +193,5 @@ namespace Filter
 
             return identityMatrix;
         }
-
     }
 }
