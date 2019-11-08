@@ -28,7 +28,6 @@ namespace Filter
             A = new DenseMatrix(rows: stateMDimension, columns: stateMDimension);
             Qt = new DenseMatrix(rows: stateMDimension, columns: stateMDimension);
             R = new DenseMatrix(rows: stateMDimension, columns: stateMDimension);
-
             InitKalman(initialLocation);
         }
 

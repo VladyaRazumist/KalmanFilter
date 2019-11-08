@@ -136,8 +136,6 @@ namespace Filter
             Algorithm filter = null;
             KalmanLatLong secondFilter = new KalmanLatLong(0F);
 
-            
-
             //using (StreamWriter file =
             //    new StreamWriter(@"C:\path.txt"))
             //{
@@ -147,7 +145,7 @@ namespace Filter
             //    }
             //}
 
-            int i = 0;
+            var i = 0;
 
             using (StreamWriter file =
                 new StreamWriter(@"C:\Alg1.txt"), jsFile = new StreamWriter(@"C:\Alg2.txt") )
