@@ -4,17 +4,16 @@ namespace Filter
 {
     public class KalmanLatLong
     {
-        private const float MinAccuracy = 1;
+        private const float MinAccuracy = 30;
         private double _velocity;
         public long TimeStampMilliseconds { get; private set; }
         public double Lat { get; private set; }
         public double Lng { get; private set; }
+        public double Accuracy => (float)Math.Sqrt(_variance);
         private double _variance; // P matrix.  Negative means object uninitialised.  NB: units irrelevant, as long as same units used throughout
-        private int _kalmanConst = 150;
+        private int _kalmanConst = 30;
 
         public KalmanLatLong(float velocity) { this._velocity = velocity; _variance = -1; }
-
-        public float GetAccuracy() { return (float)Math.Sqrt(_variance); }
 
         public void SetState(double lat, double lng, double accuracy, long timeStampMilliseconds)
         {
@@ -68,7 +67,5 @@ namespace Filter
             return double.IsNaN(d) ? 0 : d;
         }
     }
-
-
 }
 
